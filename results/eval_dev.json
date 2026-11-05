@@ -1,0 +1,1421 @@
+{
+  "run_at": "2026-11-04T12:54:26+00:00",
+  "split": "dev",
+  "generator": "extractive",
+  "documents": 186,
+  "chunks": 2902,
+  "abstain_policy": {
+    "min_rerank": -3.5,
+    "min_coverage": 0.0
+  },
+  "tuning": {
+    "dev_balanced_accuracy": 0.9354
+  },
+  "dev": {
+    "answers": {
+      "answerable_questions": 55,
+      "unanswerable_questions": 18,
+      "answer_rate": 0.9818,
+      "key_fact_recall": 0.4182,
+      "key_fact_recall_when_answered": 0.4259,
+      "cites_gold_doc_rate": 0.6852,
+      "citation_precision": 0.5167,
+      "abstain_recall": 0.8889,
+      "abstain_precision": 0.9412,
+      "latency_ms_p50": 4769.3,
+      "latency_ms_p95": 6839.1,
+      "answered_total": 56,
+      "rows": [
+        {
+          "question": "Where does the cluster keep all of its state?",
+          "answerable": true,
+          "abstained": false,
+          "answer": "This means that, potentially, your cluster never reaches a stable state. [1] (There actually is a controller that horizontally scales the nodes in your cluster.) The important point here is that the controller makes some changes to bring about your desired state, and then reports the current state back to your cluster's API server. [2] As long as the controllers for your cluster are running and able to make useful changes, it doesn't matter if the overall state is stable or not. [1]",
+          "cited_docs": [
+            "architecture/controller.md",
+            "architecture/controller.md"
+          ],
+          "confidence": {
+            "rerank_score": 1.22,
+            "term_coverage": 1.0
+          },
+          "latency_ms": 7398.38,
+          "gold": [
+            "overview/components.md"
+          ],
+          "fact_found": false,
+          "cites_gold": false
+        },
+        {
+          "question": "Which component picks the machine a new pod lands on?",
+          "answerable": true,
+          "abstained": false,
+          "answer": "The control plane's components make global decisions about the cluster (for example, scheduling), as well as detecting and responding to cluster events (for example, starting up a new pod when a Deployment's `replicas` field is unsatisfied). [1] Kube-scheduler selects an optimal node to run newly created or not yet scheduled (unscheduled) pods. [2] The scheduler finds feasible Nodes for a Pod and then runs a set of functions to score the feasible Nodes and picks a Node with the highest score among the feasible ones to run the Pod. [2]",
+          "cited_docs": [
+            "architecture/_index.md",
+            "scheduling-eviction/kube-scheduler.md"
+          ],
+          "confidence": {
+            "rerank_score": 0.466,
+            "term_coverage": 1.0
+          },
+          "latency_ms": 5265.5,
+          "gold": [
+            "overview/components.md",
+            "scheduling-eviction/kube-scheduler.md"
+          ],
+          "fact_found": true,
+          "cites_gold": true
+        },
+        {
+          "question": "How do machines tell the control plane they are still alive?",
+          "answerable": true,
+          "abstained": false,
+          "answer": "Control plane components can be run on any machine in the cluster. [1] Owner references tell the control plane which objects are dependent on others. [2] However, for simplicity, setup scripts typically start all control plane components on the same machine, and do not run user containers on this machine. [1]",
+          "cited_docs": [
+            "architecture/_index.md",
+            "architecture/garbage-collection.md"
+          ],
+          "confidence": {
+            "rerank_score": -2.564,
+            "term_coverage": 0.675
+          },
+          "latency_ms": 3070.46,
+          "gold": [
+            "architecture/leases.md",
+            "architecture/nodes.md"
+          ],
+          "fact_found": false,
+          "cites_gold": false
+        },
+        {
+          "question": "How do I give workloads time to stop cleanly when a machine powers off?",
+          "answerable": true,
+          "abstained": false,
+          "answer": "Another strategy for scaling your workloads is to **schedule** the scaling operations, for example in order to reduce resource consumption during off-peak hours. [1] You can use a Job and / or a CronJob to define tasks that run to completion and then stop. [2] It is recommended to set `ttlSecondsAfterFinished` field because unmanaged jobs (Jobs that you created directly, and not indirectly through other workload APIs such as CronJob) have a default deletion policy of `orphanDependents` causing Pods created by an unmanaged Job to be left around after that Job is fully deleted. [3]",
+          "cited_docs": [
+            "workloads/autoscaling.md",
+            "workloads/controllers/_index.md",
+            "workloads/controllers/job.md"
+          ],
+          "confidence": {
+            "rerank_score": -2.989,
+            "term_coverage": 0.532
+          },
+          "latency_ms": 4142.33,
+          "gold": [
+            "cluster-administration/node-shutdown.md"
+          ],
+          "fact_found": false,
+          "cites_gold": false
+        },
+        {
+          "question": "How does deleting a parent object also clean up the things it created?",
+          "answerable": true,
+          "abstained": false,
+          "answer": "Deleting a DaemonSet will clean up the Pods it created. [1] In background cascading deletion, the Kubernetes API server deletes the owner object immediately and the garbage collector controller (custom or default) cleans up the dependent objects in the background. [2] Deleting a Job will clean up the Pods it created. [3]",
+          "cited_docs": [
+            "workloads/controllers/daemonset.md",
+            "architecture/garbage-collection.md",
+            "workloads/controllers/job.md"
+          ],
+          "confidence": {
+            "rerank_score": 1.132,
+            "term_coverage": 0.647
+          },
+          "latency_ms": 3755.46,
+          "gold": [
+            "architecture/garbage-collection.md"
+          ],
+          "fact_found": false,
+          "cites_gold": true
+        },
+        {
+          "question": "If I don't set an image pull setting, what is used by default?",
+          "answerable": true,
+          "abstained": false,
+          "answer": "When you first create a Deployment, StatefulSet, Pod, or other object that includes a PodTemplate, and a pull policy was not explicitly specified, then by default the pull policy of all containers in that Pod will be set to `IfNotPresent`. [1] This policy causes the kubelet to skip pulling an image if it already exists. [1] When you (or a controller) submit a new Pod to the API server, your cluster sets the `imagePullPolicy` field when specific conditions are met: - if you omit the `imagePullPolicy` field, and you specify the digest for the container image, the `imagePullPolicy` is automatically set to `IfNotPresent`. - if you omit the `imagePullPolicy` field, and the tag for the container image is `:latest`, `imagePullPolicy` is automatically set to `Always`. - if you omit the `imagePullPolicy` field, and you don't specify the tag for the container image, `imagePullPolicy` is automatically set to `Always`. - if you omit the `imagePullPolicy` field, and you specify a tag for the container image that isn't `:latest`, the `imagePullPolicy` is automatically set to `IfNotPresent`. [2]",
+          "cited_docs": [
+            "containers/images.md",
+            "containers/images.md"
+          ],
+          "confidence": {
+            "rerank_score": 5.698,
+            "term_coverage": 1.0
+          },
+          "latency_ms": 4561.9,
+          "gold": [
+            "containers/images.md"
+          ],
+          "fact_found": true,
+          "cites_gold": true
+        },
+        {
+          "question": "Can I run a command right before a container is terminated?",
+          "answerable": true,
+          "abstained": false,
+          "answer": "If a container has a `preStop` hook configured, this hook runs before the container enters the `Terminated` state. [1] `PreStop` This hook is called immediately before a container is terminated due to an API request or management event such as a liveness/startup probe failure, preemption, resource contention and others. [2] A call to the `PreStop` hook fails if the container is already in a terminated or completed state and the hook must complete before the TERM signal to stop the container can be sent. [2]",
+          "cited_docs": [
+            "workloads/pods/pod-lifecycle.md",
+            "containers/container-lifecycle-hooks.md"
+          ],
+          "confidence": {
+            "rerank_score": 4.568,
+            "term_coverage": 0.716
+          },
+          "latency_ms": 5722.23,
+          "gold": [
+            "containers/container-lifecycle-hooks.md"
+          ],
+          "fact_found": true,
+          "cites_gold": true
+        },
+        {
+          "question": "How do I run some workloads under a sandboxed runtime such as gVisor or Kata?",
+          "answerable": true,
+          "abstained": false,
+          "answer": "Sandbox Pods may be identified by the use of a sandboxed runtime (such as gVisor or Kata Containers), but there is no standard definition of what a sandboxed runtime is. [1] For sensitive workloads consider using kernel emulation tools like gVisor, or virtualized isolation using a mechanism such as kata-containers. [2] Running workloads in a sandbox environment helps to insulate the host from container escapes, where an attacker exploits a vulnerability to gain access to the host system and all the processes/files running on that host. [3]",
+          "cited_docs": [
+            "security/pod-security-standards.md",
+            "security/application-security-checklist.md",
+            "security/multi-tenancy.md"
+          ],
+          "confidence": {
+            "rerank_score": 5.075,
+            "term_coverage": 0.915
+          },
+          "latency_ms": 3862.23,
+          "gold": [
+            "containers/runtime-class.md"
+          ],
+          "fact_found": false,
+          "cites_gold": false
+        },
+        {
+          "question": "How do I automatically add replicas when CPU usage climbs?",
+          "answerable": true,
+          "abstained": false,
+          "answer": "Saving this manifest into `hpa-rs.yaml` and submitting it to a Kubernetes cluster should create the defined HPA that autoscales the target ReplicaSet depending on the CPU usage of the replicated Pods. [1] It is implemented as a Kubernetes API resource and a controller and periodically adjusts the number of replicas in a workload to match observed resource utilization such as CPU or memory usage. [2] That is, a ReplicaSet can be auto-scaled by an HPA. [1]",
+          "cited_docs": [
+            "workloads/controllers/replicaset.md",
+            "workloads/autoscaling.md"
+          ],
+          "confidence": {
+            "rerank_score": 1.765,
+            "term_coverage": 0.651
+          },
+          "latency_ms": 3415.98,
+          "gold": [
+            "workloads/autoscaling/horizontal-pod-autoscale.md",
+            "workloads/autoscaling.md"
+          ],
+          "fact_found": false,
+          "cites_gold": true
+        },
+        {
+          "question": "How do I run a helper container for the pod's whole life alongside the main app?",
+          "answerable": true,
+          "abstained": false,
+          "answer": "Sidecar containers run alongside _app containers_ in the same pod. [1] They are active throughout the lifecycle of the pod and can be started and stopped independently of the main container. [2] Sidecar containers are the secondary containers that run along with the main application container within the same Pod. [3]",
+          "cited_docs": [
+            "workloads/pods/sidecar-containers.md",
+            "workloads/pods/sidecar-containers.md",
+            "workloads/pods/sidecar-containers.md"
+          ],
+          "confidence": {
+            "rerank_score": 3.875,
+            "term_coverage": 0.686
+          },
+          "latency_ms": 5021.62,
+          "gold": [
+            "workloads/pods/sidecar-containers.md"
+          ],
+          "fact_found": false,
+          "cites_gold": true
+        },
+        {
+          "question": "How can separate teams share one cluster with their own isolated names?",
+          "answerable": true,
+          "abstained": false,
+          "answer": "In addition, it is a best practice to give each namespace names that are unique across your entire fleet (that is, even if they are in separate clusters), as this gives you the flexibility to switch between dedicated and shared clusters in the future, or to use multi-cluster tooling such as service meshes. [1] A common form of multi-tenancy is to share a cluster between multiple teams within an organization, each of whom may operate one or more workloads. [2] There is often some level of trust between members of different teams, but Kubernetes policies such as RBAC, quotas, and network policies are essential to safely and fairly share clusters. [2]",
+          "cited_docs": [
+            "security/multi-tenancy.md",
+            "security/multi-tenancy.md"
+          ],
+          "confidence": {
+            "rerank_score": 1.581,
+            "term_coverage": 0.796
+          },
+          "latency_ms": 3345.16,
+          "gold": [
+            "overview/working-with-objects/namespaces.md"
+          ],
+          "fact_found": true,
+          "cites_gold": false
+        },
+        {
+          "question": "How do I pick out a group of objects using tags I put on them?",
+          "answerable": true,
+          "abstained": false,
+          "answer": "Labels can be used to organize and to select subsets of objects. [1] Labels can be used to select objects and to find collections of objects that satisfy certain conditions. [2] Avoid using image tags to reference an image, especially the `latest` tag, the image behind a tag can be easily modified in a registry. [3]",
+          "cited_docs": [
+            "overview/working-with-objects/labels.md",
+            "overview/working-with-objects/annotations.md",
+            "security/security-checklist.md"
+          ],
+          "confidence": {
+            "rerank_score": -3.246,
+            "term_coverage": 0.638
+          },
+          "latency_ms": 4105.08,
+          "gold": [
+            "overview/working-with-objects/labels.md"
+          ],
+          "fact_found": false,
+          "cites_gold": true
+        },
+        {
+          "question": "Where does kubectl find which clusters and users to connect with?",
+          "answerable": true,
+          "abstained": false,
+          "answer": "The `kubectl` tool connects to the API server and authenticates using the cluster, user, and context defined in your kubeconfig file. [1] Because your kubeconfig can define multiple clusters, users, and contexts, you can use `kubectl` to switch between clusters without reconfiguring your environment. [1] When you run `kubectl` from outside a cluster, it uses the kubeconfig file to find the API server address and credentials. [1]",
+          "cited_docs": [
+            "overview/kubectl.md"
+          ],
+          "confidence": {
+            "rerank_score": 6.278,
+            "term_coverage": 1.0
+          },
+          "latency_ms": 3928.64,
+          "gold": [
+            "configuration/organize-cluster-access-kubeconfig.md"
+          ],
+          "fact_found": true,
+          "cites_gold": false
+        },
+        {
+          "question": "What identity does a workload use when it calls the API server?",
+          "answerable": true,
+          "abstained": false,
+          "answer": "For example, a workload Pod requires an identity for a commercially available cloud API, and the commercial provider allows configuring a suitable trust relationship. * Authenticating to a private image registry using an `imagePullSecret`. * An external service needs to communicate with the Kubernetes API server. [1] The Workload API resource is part of the `scheduling.k8s.io/v1beta1` API group and your cluster must have that API group enabled, as well as the `GenericWorkload` feature gate, before you can use this API. [2] By default, user accounts don't exist in the Kubernetes API server; instead, the API server treats user identities as opaque data. [3]",
+          "cited_docs": [
+            "security/service-accounts.md",
+            "workloads/workload-api/_index.md",
+            "security/service-accounts.md"
+          ],
+          "confidence": {
+            "rerank_score": 2.131,
+            "term_coverage": 0.715
+          },
+          "latency_ms": 5285.95,
+          "gold": [
+            "security/service-accounts.md"
+          ],
+          "fact_found": false,
+          "cites_gold": true
+        },
+        {
+          "question": "How can I add my own object types to the API?",
+          "answerable": true,
+          "abstained": false,
+          "answer": "You can define and use your own Secret type by assigning a non-empty string as the `type` value for a Secret object (an empty string is treated as an `Opaque` type). [1] There are two main ways to have Nodes added to the API server: 1. [2] You (or another human user) manually add a Node object After you create a Node object, or the kubelet on a node self-registers, the control plane checks whether the new Node object is valid. [2]",
+          "cited_docs": [
+            "configuration/secret.md",
+            "architecture/nodes.md"
+          ],
+          "confidence": {
+            "rerank_score": 3.015,
+            "term_coverage": 1.0
+          },
+          "latency_ms": 6417.74,
+          "gold": [
+            "extend-kubernetes/api-extension/custom-resources.md"
+          ],
+          "fact_found": false,
+          "cites_gold": false
+        },
+        {
+          "question": "What is the office wifi password?",
+          "answerable": false,
+          "abstained": true,
+          "answer": "I couldn't find this in the knowledge base.",
+          "cited_docs": [],
+          "confidence": {
+            "rerank_score": -8.661,
+            "term_coverage": 0.254
+          },
+          "latency_ms": 4718.84
+        },
+        {
+          "question": "How many vacation days do new hires get?",
+          "answerable": false,
+          "abstained": true,
+          "answer": "I couldn't find this in the knowledge base.",
+          "cited_docs": [],
+          "confidence": {
+            "rerank_score": -10.004,
+            "term_coverage": 0.469
+          },
+          "latency_ms": 5262.92
+        },
+        {
+          "question": "How do I set up dependency caching in GitHub Actions?",
+          "answerable": false,
+          "abstained": true,
+          "answer": "I couldn't find this in the knowledge base.",
+          "cited_docs": [],
+          "confidence": {
+            "rerank_score": -6.779,
+            "term_coverage": 0.888
+          },
+          "latency_ms": 4889.61
+        },
+        {
+          "question": "What caused last month's production incident in checkout?",
+          "answerable": false,
+          "abstained": true,
+          "answer": "I couldn't find this in the knowledge base.",
+          "cited_docs": [],
+          "confidence": {
+            "rerank_score": -11.076,
+            "term_coverage": 0.48
+          },
+          "latency_ms": 4536.07
+        },
+        {
+          "question": "What does Google Cloud charge for network egress to Asia?",
+          "answerable": false,
+          "abstained": true,
+          "answer": "I couldn't find this in the knowledge base.",
+          "cited_docs": [],
+          "confidence": {
+            "rerank_score": -6.507,
+            "term_coverage": 0.338
+          },
+          "latency_ms": 4840.9
+        },
+        {
+          "question": "How do I rotate our Okta API tokens?",
+          "answerable": false,
+          "abstained": false,
+          "answer": "In Kubernetes v1.22 and later, the recommended approach is to obtain a short-lived, automatically rotating ServiceAccount token by using the `TokenRequest` API instead. [1] In v1.22 and later, Kubernetes gets a short-lived, **automatically rotating** token using the `TokenRequest` API and mounts the token as a projected volume. [2] The token expires automatically and can rotate upon expiration. [3]",
+          "cited_docs": [
+            "configuration/secret.md",
+            "security/service-accounts.md",
+            "security/service-accounts.md"
+          ],
+          "confidence": {
+            "rerank_score": 0.954,
+            "term_coverage": 0.583
+          },
+          "latency_ms": 4951.2
+        },
+        {
+          "question": "My app needs a one-off setup step to finish before it starts. What should I use?",
+          "answerable": true,
+          "abstained": false,
+          "answer": "Consequently, they can be given access to Secrets that app containers cannot access. * Because init containers run to completion before any app containers start, init containers offer a mechanism to block or delay app container startup until a set of preconditions are met. [1] A Pod can have multiple containers running apps within it, but it can also have one or more init containers, which are run before the app containers are started. [2] For example, there is no need to make an image `FROM` another image just to use a tool like `sed`, `awk`, `python`, or `dig` during setup. * The application image builder and deployer roles can work independently without the need to jointly build a single app image. * Init containers can run with a different view of the filesystem than app containers in the same Pod. [1]",
+          "cited_docs": [
+            "workloads/pods/init-containers.md",
+            "workloads/pods/init-containers.md"
+          ],
+          "confidence": {
+            "rerank_score": -1.613,
+            "term_coverage": 0.693
+          },
+          "latency_ms": 3974.23,
+          "gold": [
+            "workloads/pods/init-containers.md"
+          ],
+          "fact_found": true,
+          "cites_gold": true
+        },
+        {
+          "question": "How do I stop a scheduled task from starting while its previous run is still going?",
+          "answerable": true,
+          "abstained": false,
+          "answer": "For example, if `concurrencyPolicy` is set to `Forbid` and a CronJob was attempted to be scheduled when there was a previous schedule still running, then it would count as missed. [1] For example, if you have a backup Job that runs twice a day, you might allow it to start up to 8 hours late, but no later, because a backup taken any later wouldn't be useful: you would instead prefer to wait for the next scheduled run. [2] After missing the deadline, the CronJob skips that instance of the Job (future occurrences are still scheduled). [2]",
+          "cited_docs": [
+            "workloads/controllers/cron-jobs.md",
+            "workloads/controllers/cron-jobs.md"
+          ],
+          "confidence": {
+            "rerank_score": 3.46,
+            "term_coverage": 1.0
+          },
+          "latency_ms": 5828.62,
+          "gold": [
+            "workloads/controllers/cron-jobs.md"
+          ],
+          "fact_found": true,
+          "cites_gold": true
+        },
+        {
+          "question": "How can finished batch tasks be removed automatically after a while?",
+          "answerable": true,
+          "abstained": false,
+          "answer": "If the field is set to `0`, the Job will be eligible to be automatically deleted immediately after it finishes. [1] Another way to clean up finished Jobs (either `Complete` or `Failed`) automatically is to use a TTL mechanism provided by a TTL controller for finished resources, by specifying the `.spec.ttlSecondsAfterFinished` field of the Job. [1] You can use this mechanism to clean up finished Jobs (either `Complete` or `Failed`) automatically by specifying the `.spec.ttlSecondsAfterFinished` field of a Job, as in this example. [2]",
+          "cited_docs": [
+            "workloads/controllers/job.md",
+            "workloads/controllers/ttlafterfinished.md"
+          ],
+          "confidence": {
+            "rerank_score": 4.002,
+            "term_coverage": 0.582
+          },
+          "latency_ms": 6828.64,
+          "gold": [
+            "workloads/controllers/ttlafterfinished.md",
+            "workloads/controllers/job.md"
+          ],
+          "fact_found": true,
+          "cites_gold": true
+        },
+        {
+          "question": "What should I use to run one log collector on every machine?",
+          "answerable": true,
+          "abstained": false,
+          "answer": "Some typical uses of a DaemonSet are: - running a cluster storage daemon on every node - running a logs collection daemon on every node - running a node monitoring daemon on every node In a simple case, one DaemonSet, covering all nodes, would be used for each type of daemon. [1] Because the logging agent must run on every node, it is recommended to run the agent as a `DaemonSet`. [2] Here are some options: * Use a node-level logging agent that runs on every node. * Include a dedicated sidecar container for logging in an application pod. * Push logs directly to a backend from within an application. [3]",
+          "cited_docs": [
+            "workloads/controllers/daemonset.md",
+            "cluster-administration/logging.md",
+            "cluster-administration/logging.md"
+          ],
+          "confidence": {
+            "rerank_score": 1.748,
+            "term_coverage": 0.74
+          },
+          "latency_ms": 4490.01,
+          "gold": [
+            "workloads/controllers/daemonset.md"
+          ],
+          "fact_found": true,
+          "cites_gold": true
+        },
+        {
+          "question": "A database needs stable names and its own disk for each replica. Which workload type fits?",
+          "answerable": true,
+          "abstained": false,
+          "answer": "If an application doesn't require any stable identifiers or ordered deployment, deletion, or scaling, you should deploy your application using a workload object that provides a set of stateless replicas. [1] Deployment or ReplicaSet may be better suited to your stateless needs. [1] In the above, stable is synonymous with persistence across Pod (re)scheduling. [1]",
+          "cited_docs": [
+            "workloads/controllers/statefulset.md"
+          ],
+          "confidence": {
+            "rerank_score": 0.906,
+            "term_coverage": 0.666
+          },
+          "latency_ms": 4958.03,
+          "gold": [
+            "workloads/controllers/statefulset.md"
+          ],
+          "fact_found": false,
+          "cites_gold": true
+        },
+        {
+          "question": "What are the default surge and unavailable percentages during a rolling update?",
+          "answerable": true,
+          "abstained": false,
+          "answer": "For example, when this value is set to 30%, the old ReplicaSet can be scaled down to 70% of desired Pods immediately when the rolling update starts. [1] `.spec.strategy.rollingUpdate.maxUnavailable` is an optional field that specifies the maximum number of Pods that can be unavailable during the update process. [1] For example, when this value is set to 30%, the new ReplicaSet can be scaled up immediately when the rolling update starts, such that the total number of old and new Pods does not exceed 130% of desired Pods. [2]",
+          "cited_docs": [
+            "workloads/controllers/deployment.md",
+            "workloads/controllers/deployment.md"
+          ],
+          "confidence": {
+            "rerank_score": 4.851,
+            "term_coverage": 1.0
+          },
+          "latency_ms": 6384.88,
+          "gold": [
+            "workloads/controllers/deployment.md"
+          ],
+          "fact_found": false,
+          "cites_gold": true
+        },
+        {
+          "question": "A release went badly. How do I go back to the previous version?",
+          "answerable": true,
+          "abstained": false,
+          "answer": "Follow the steps given below to rollback the Deployment from the current version to the previous version, which is version 2. [1] If you want to show all metrics hidden in the previous release, you can set the `show-hidden-metrics-for-version` flag to the previous version. [2] To fix this, you need to rollback to a previous revision of Deployment that is stable. [3]",
+          "cited_docs": [
+            "workloads/controllers/deployment.md",
+            "cluster-administration/system-metrics.md",
+            "workloads/controllers/deployment.md"
+          ],
+          "confidence": {
+            "rerank_score": 0.6,
+            "term_coverage": 0.406
+          },
+          "latency_ms": 5772.4,
+          "gold": [
+            "workloads/controllers/deployment.md"
+          ],
+          "fact_found": false,
+          "cites_gold": true
+        },
+        {
+          "question": "How do I make sure node maintenance doesn't take down too many replicas at once?",
+          "answerable": true,
+          "abstained": false,
+          "answer": "The nodes have enough capacity to run that many replicas; however, the clients that interact with this workload are split across three different datacenters (or infrastructure zones). [1] Imagine that you have a cluster of up to twenty nodes, and you want to run a workload that automatically scales how many replicas it uses. [1] If there are too many pods, the ReplicationController terminates the extra pods. [2]",
+          "cited_docs": [
+            "scheduling-eviction/topology-spread-constraints.md",
+            "workloads/controllers/replicationcontroller.md"
+          ],
+          "confidence": {
+            "rerank_score": 1.119,
+            "term_coverage": 0.673
+          },
+          "latency_ms": 3409.41,
+          "gold": [
+            "workloads/pods/disruptions.md"
+          ],
+          "fact_found": false,
+          "cites_gold": false
+        },
+        {
+          "question": "What quality of service class does a pod get if requests equal limits for every container?",
+          "answerable": true,
+          "abstained": false,
+          "answer": "For a Pod to be given a QoS class of `Guaranteed`: * Every Container in the Pod must have a memory limit and a memory request, both greater than zero. * For every Container in the Pod, the memory limit must equal the memory request. * Every Container in the Pod must have a CPU limit and a CPU request, both greater than zero. * For every Container in the Pod, the CPU limit must equal the CPU request. [1] Kubernetes may create a replacement Pod, usually on a different node. * The resource request of a Pod is equal to the sum of the resource requests of its component Containers, and the resource limit of a Pod is equal to the sum of the resource limits of its component Containers. * The kube-scheduler does not consider QoS class when selecting which Pods to preempt. [2] In other words, a Pod is `BestEffort` only if none of the Containers in the Pod have a memory limit or a memory request, and none of the Containers in the Pod have a CPU limit or a CPU request, and the Pod does not have any Pod-level memory or CPU limits or requests. [3]",
+          "cited_docs": [
+            "workloads/pods/pod-qos.md",
+            "workloads/pods/pod-qos.md",
+            "workloads/pods/pod-qos.md"
+          ],
+          "confidence": {
+            "rerank_score": 8.379,
+            "term_coverage": 0.905
+          },
+          "latency_ms": 4200.47,
+          "gold": [
+            "workloads/pods/pod-qos.md"
+          ],
+          "fact_found": true,
+          "cites_gold": true
+        },
+        {
+          "question": "What status do I see when a container keeps failing and restart delays keep growing?",
+          "answerable": true,
+          "abstained": false,
+          "answer": "That is, the container either exited with non-zero status or was terminated by the system, and is not set for automatic restarting. [1] In other words, when a container enters the crash loop, Kubernetes applies the exponential backoff delay mentioned in the Container restart policy. [2] With the alpha feature gate `ReduceDefaultCrashLoopBackOffDecay` enabled, container start retries across your cluster will be reduced to begin at 1s (instead of 10s) and increase exponentially by 2x each restart until a maximum delay of 60s (instead of 300s which is 5 minutes). [3]",
+          "cited_docs": [
+            "workloads/pods/pod-lifecycle.md",
+            "workloads/pods/pod-lifecycle.md",
+            "workloads/pods/pod-lifecycle.md"
+          ],
+          "confidence": {
+            "rerank_score": 1.301,
+            "term_coverage": 0.604
+          },
+          "latency_ms": 5119.47,
+          "gold": [
+            "workloads/pods/pod-lifecycle.md"
+          ],
+          "fact_found": true,
+          "cites_gold": true
+        },
+        {
+          "question": "How do I troubleshoot a running pod whose image has no shell?",
+          "answerable": true,
+          "abstained": false,
+          "answer": "Here, three pods are created, but none is running yet, perhaps because the image is being pulled. [1] Eventually, all the running Pods would have the new software. [2] You can run multiple copies of your app, and use a _rollout_ to gradually shift the traffic to new healthy Pods. [2]",
+          "cited_docs": [
+            "workloads/controllers/replicationcontroller.md",
+            "workloads/management.md"
+          ],
+          "confidence": {
+            "rerank_score": 3.263,
+            "term_coverage": 0.447
+          },
+          "latency_ms": 5624.49,
+          "gold": [
+            "workloads/pods/ephemeral-containers.md"
+          ],
+          "fact_found": false,
+          "cites_gold": false
+        },
+        {
+          "question": "Which health check decides whether a container should receive traffic?",
+          "answerable": true,
+          "abstained": false,
+          "answer": "For readiness probes, the kubelet marks the container as not ready, and the Pod stops receiving traffic from matching Services. [1] The readiness probe might be the same as the liveness probe, but the existence of the readiness probe in the spec means that the Pod will start without receiving any traffic and only start receiving traffic after the probe starts succeeding. [2] Load balancer health checks are critical to modern applications. [3]",
+          "cited_docs": [
+            "workloads/pods/probes.md",
+            "workloads/pods/probes.md",
+            "services-networking/service.md"
+          ],
+          "confidence": {
+            "rerank_score": -0.097,
+            "term_coverage": 0.672
+          },
+          "latency_ms": 3718.96,
+          "gold": [
+            "workloads/pods/probes.md",
+            "workloads/pods/pod-lifecycle.md"
+          ],
+          "fact_found": true,
+          "cites_gold": true
+        },
+        {
+          "question": "How do I reach my app on a fixed port of each machine without a cloud load balancer?",
+          "answerable": true,
+          "abstained": false,
+          "answer": "The cloud-controller-manager component then configures the external load balancer to forward traffic to that assigned node port. [1] On cloud providers which support external load balancers, setting the `type` field to `LoadBalancer` provisions a load balancer for your Service. [1] You can configure a load balanced Service to omit assigning a node port, provided that the cloud provider implementation supports this. [1]",
+          "cited_docs": [
+            "services-networking/service.md"
+          ],
+          "confidence": {
+            "rerank_score": -1.38,
+            "term_coverage": 0.667
+          },
+          "latency_ms": 6854.68,
+          "gold": [
+            "services-networking/service.md"
+          ],
+          "fact_found": false,
+          "cites_gold": true
+        },
+        {
+          "question": "What range of ports is used by default for ports opened on every machine?",
+          "answerable": true,
+          "abstained": false,
+          "answer": "When using the default NodePort range 30000-32767, the bands are partitioned as follows: - Static band: 30000-30085 - Dynamic band: 30086-32767 See Avoid Collisions Assigning Ports to NodePort Services for more details on how the static and dynamic bands are calculated. [1] This is achievable with the usage of the `endPort` field, as the following example: The above rule allows any Pod with label `role=db` on the namespace `default` to communicate with any IP within the range `10.0.0.0/24` over TCP, provided that the target port is between the range 32000 and 32768. [2] If you set the `type` field to `NodePort`, the Kubernetes control plane allocates a port from a range specified by `--service-node-port-range` flag (default: 30000-32767). [3]",
+          "cited_docs": [
+            "services-networking/service.md",
+            "services-networking/network-policies.md",
+            "services-networking/service.md"
+          ],
+          "confidence": {
+            "rerank_score": 1.518,
+            "term_coverage": 0.466
+          },
+          "latency_ms": 5640.72,
+          "gold": [
+            "services-networking/service.md"
+          ],
+          "fact_found": true,
+          "cites_gold": true
+        },
+        {
+          "question": "How can clients get the backend pod IPs directly, with no virtual IP in front?",
+          "answerable": true,
+          "abstained": false,
+          "answer": "Clients can connect using that virtual IP address, and Kubernetes then load-balances traffic to that Service across the different backing Pods. [1] This leads to a problem: if some set of Pods (call them \"backends\") provides functionality to other Pods (call them \"frontends\") inside your cluster, how do the frontends find out and keep track of which IP address to connect to, so that the frontend can use the backend part of the workload? [2] Services that are headless don't configure routes and packet forwarding using virtual IP addresses and proxies; instead, headless Services report the endpoint IP addresses of the individual pods via internal DNS records, served through the cluster's DNS service. [3]",
+          "cited_docs": [
+            "services-networking/cluster-ip-allocation.md",
+            "services-networking/service.md",
+            "services-networking/service.md"
+          ],
+          "confidence": {
+            "rerank_score": 3.347,
+            "term_coverage": 0.657
+          },
+          "latency_ms": 4212.27,
+          "gold": [
+            "services-networking/service.md"
+          ],
+          "fact_found": true,
+          "cites_gold": true
+        },
+        {
+          "question": "With no rules in place, are pods restricted in who they can talk to?",
+          "answerable": true,
+          "abstained": false,
+          "answer": "Pod-to-pod communication can be controlled using Network Policies, which restrict communication between pods using namespace labels or IP address ranges. [1] By default, all pods in a Kubernetes cluster are allowed to communicate with each other, and all network traffic is unencrypted. [1] In a multi-tenant environment where strict network isolation between tenants is required, starting with a default policy that denies communication between pods is recommended with another rule that allows all pods to query the DNS server for name resolution. [1]",
+          "cited_docs": [
+            "security/multi-tenancy.md"
+          ],
+          "confidence": {
+            "rerank_score": 3.373,
+            "term_coverage": 0.643
+          },
+          "latency_ms": 5713.77,
+          "gold": [
+            "services-networking/network-policies.md"
+          ],
+          "fact_found": false,
+          "cites_gold": false
+        },
+        {
+          "question": "How do I send web traffic for different domain names to different backends?",
+          "answerable": true,
+          "abstained": false,
+          "answer": "Both the host and path must match the content of an incoming request before the load balancer directs traffic to the referenced Service. * A backend is a combination of Service and port names as described in the Service doc or a custom resource backend by way of a CRD. [1] An Ingress with no rules sends all traffic to a single default backend and `.spec.defaultBackend` is the backend that should handle requests in that case. [2] HTTP (and HTTPS) requests to the Ingress that match the host and path of the rule are sent to the listed backend. [1]",
+          "cited_docs": [
+            "services-networking/ingress.md",
+            "services-networking/ingress.md"
+          ],
+          "confidence": {
+            "rerank_score": 0.682,
+            "term_coverage": 0.565
+          },
+          "latency_ms": 7369.97,
+          "gold": [
+            "services-networking/ingress.md"
+          ],
+          "fact_found": false,
+          "cites_gold": true
+        },
+        {
+          "question": "What is the newer alternative to Ingress for routing traffic?",
+          "answerable": true,
+          "abstained": false,
+          "answer": "Here is a simple example where an Ingress sends all its traffic to one Service: An Ingress may be configured to give Services externally-reachable URLs, load balance traffic, terminate SSL / TLS, and offer name-based virtual hosting. [1] An Ingress controller is responsible for fulfilling the Ingress, usually with a load balancer, though it may also configure your edge router or additional frontends to help handle the traffic. [1] Traffic routing is controlled by rules defined on the Ingress resource. [1]",
+          "cited_docs": [
+            "services-networking/ingress.md"
+          ],
+          "confidence": {
+            "rerank_score": 1.864,
+            "term_coverage": 0.741
+          },
+          "latency_ms": 4489.9,
+          "gold": [
+            "services-networking/gateway.md",
+            "services-networking/ingress.md"
+          ],
+          "fact_found": false,
+          "cites_gold": true
+        },
+        {
+          "question": "What DNS name do I use to reach a service in another namespace?",
+          "answerable": true,
+          "abstained": false,
+          "answer": "For example, CoreDNS (the default DNS service for Kubernetes) can leverage Kubernetes metadata to restrict queries to Pods and Services within a namespace. [1] By creating namespaces with the same name as public top-level domains, Services in these namespaces can have short DNS names that overlap with public DNS records. [2] If you want to reach across namespaces, you need to use the fully qualified domain name (FQDN). [2]",
+          "cited_docs": [
+            "security/multi-tenancy.md",
+            "overview/working-with-objects/namespaces.md"
+          ],
+          "confidence": {
+            "rerank_score": 6.084,
+            "term_coverage": 0.811
+          },
+          "latency_ms": 5398.86,
+          "gold": [
+            "services-networking/dns-pod-service.md"
+          ],
+          "fact_found": false,
+          "cites_gold": false
+        },
+        {
+          "question": "How do I keep service traffic in the same availability zone to cut cross-zone costs?",
+          "answerable": true,
+          "abstained": false,
+          "answer": "It is possible to use both features in the same cluster on different Services, just not on the same Service. * This approach will not work well for Services that have a large proportion of traffic originating from a subset of zones. [1] _Topology Aware Routing_ adjusts routing behavior to prefer keeping traffic in the zone it originated from. [2] _Service Internal Traffic Policy_ enables internal traffic restrictions to only route internal traffic to endpoints within the node the traffic originated from. [3]",
+          "cited_docs": [
+            "services-networking/topology-aware-routing.md",
+            "services-networking/topology-aware-routing.md",
+            "services-networking/service-traffic-policy.md"
+          ],
+          "confidence": {
+            "rerank_score": -1.844,
+            "term_coverage": 0.533
+          },
+          "latency_ms": 5248.61,
+          "gold": [
+            "services-networking/topology-aware-routing.md"
+          ],
+          "fact_found": true,
+          "cites_gold": true
+        },
+        {
+          "question": "Which volume mode lets just one machine mount a disk for reading and writing?",
+          "answerable": true,
+          "abstained": false,
+          "answer": "The access modes are: `ReadWriteOnce` : the volume can be mounted as read-write by a single node. [1] `ReadWriteMany` : the volume can be mounted as read-write by many nodes. [2] If the access modes are specified as ReadWriteOncePod, the volume is constrained and can be mounted on only a single Pod. > __Important!__ A volume can only be mounted using one access mode at a time, > even if it supports many. [3]",
+          "cited_docs": [
+            "storage/persistent-volumes.md",
+            "storage/persistent-volumes.md",
+            "storage/persistent-volumes.md"
+          ],
+          "confidence": {
+            "rerank_score": 4.642,
+            "term_coverage": 0.287
+          },
+          "latency_ms": 5097.31,
+          "gold": [
+            "storage/persistent-volumes.md"
+          ],
+          "fact_found": true,
+          "cites_gold": true
+        },
+        {
+          "question": "How do I keep a disk's data after its claim gets deleted?",
+          "answerable": true,
+          "abstained": false,
+          "answer": "But it is not yet available for another claim because the previous claimant's data remains on the volume. [1] The associated storage asset in external infrastructure still exists after the PV is deleted. [1] The reclaim policy for a PersistentVolume tells the cluster what to do with the volume after it has been released of its claim. [2]",
+          "cited_docs": [
+            "storage/persistent-volumes.md",
+            "storage/persistent-volumes.md"
+          ],
+          "confidence": {
+            "rerank_score": 4.428,
+            "term_coverage": 0.542
+          },
+          "latency_ms": 4336.18,
+          "gold": [
+            "storage/persistent-volumes.md"
+          ],
+          "fact_found": false,
+          "cites_gold": true
+        },
+        {
+          "question": "What gives containers in a pod scratch space that vanishes with the pod?",
+          "answerable": true,
+          "abstained": false,
+          "answer": "The kubelet can provide scratch space to Pods using local ephemeral storage to mount `emptyDir` volumes into containers. [1] There are different kinds of volume that you can use for different purposes, such as: - populating a configuration file based on a ConfigMap or a Secret - providing some temporary scratch space for a Pod - sharing a filesystem between two different containers in the same Pod - sharing a filesystem between two different Pods (even if those Pods run on different nodes) - durably storing data so that it stays available even if the Pod restarts or is replaced - passing configuration information to an app running in a container, based on details of the Pod the container is in (for example: telling a sidecar container what namespace the Pod is running in) - providing read-only access to data in a different container image Data sharing can be between different local processes within a container, or between different containers, or between Pods. [2] Pods use ephemeral local storage for scratch space, caching, and for logs. [1]",
+          "cited_docs": [
+            "storage/ephemeral-storage.md",
+            "storage/volumes.md"
+          ],
+          "confidence": {
+            "rerank_score": 3.493,
+            "term_coverage": 0.528
+          },
+          "latency_ms": 3729.09,
+          "gold": [
+            "storage/volumes.md",
+            "storage/ephemeral-volumes.md"
+          ],
+          "fact_found": true,
+          "cites_gold": true
+        },
+        {
+          "question": "How can disks be created on demand with no admin creating them first?",
+          "answerable": true,
+          "abstained": false,
+          "answer": "Dynamic volume provisioning allows storage volumes to be created on-demand. [1] This behavior helps administrators change default StorageClass by removing the old one first and then creating or setting another one. [2] Without dynamic provisioning, cluster administrators have to manually make calls to their cloud or storage provider to create new storage volumes, and then create `PersistentVolume` objects to represent them in Kubernetes. [1]",
+          "cited_docs": [
+            "storage/dynamic-provisioning.md",
+            "storage/persistent-volumes.md"
+          ],
+          "confidence": {
+            "rerank_score": -1.885,
+            "term_coverage": 1.0
+          },
+          "latency_ms": 5377.05,
+          "gold": [
+            "storage/dynamic-provisioning.md"
+          ],
+          "fact_found": true,
+          "cites_gold": true
+        },
+        {
+          "question": "How do I take a point-in-time copy of a disk?",
+          "answerable": true,
+          "abstained": true,
+          "answer": "I couldn't find this in the knowledge base.",
+          "cited_docs": [],
+          "confidence": {
+            "rerank_score": -9.673,
+            "term_coverage": 1.0
+          },
+          "latency_ms": 3356.12,
+          "gold": [
+            "storage/volume-snapshots.md"
+          ],
+          "fact_found": false,
+          "cites_gold": false
+        },
+        {
+          "question": "What is the maximum size of data I can put in a ConfigMap?",
+          "answerable": true,
+          "abstained": false,
+          "answer": "The data stored in a ConfigMap cannot exceed 1 MiB. [1] A ConfigMap is not designed to hold large chunks of data. [1] The data stored in a ConfigMap can be referenced in a volume of type `configMap` and then consumed by containerized applications running in a Pod. [2]",
+          "cited_docs": [
+            "configuration/configmap.md",
+            "storage/volumes.md"
+          ],
+          "confidence": {
+            "rerank_score": 2.299,
+            "term_coverage": 0.502
+          },
+          "latency_ms": 5081.1,
+          "gold": [
+            "configuration/configmap.md"
+          ],
+          "fact_found": true,
+          "cites_gold": true
+        },
+        {
+          "question": "Are credentials stored as Secrets encrypted by default?",
+          "answerable": true,
+          "abstained": false,
+          "answer": "Kubernetes Secrets are, by default, stored unencrypted in the API server's underlying data store (etcd). [1] By default, Secret objects are stored unencrypted in etcd. [2] During storage provisioning, a secret named by `secretName` is created for the mounting credentials. [3]",
+          "cited_docs": [
+            "configuration/secret.md",
+            "security/secrets-good-practices.md",
+            "storage/storage-classes.md"
+          ],
+          "confidence": {
+            "rerank_score": 4.519,
+            "term_coverage": 1.0
+          },
+          "latency_ms": 4465.51,
+          "gold": [
+            "configuration/secret.md"
+          ],
+          "fact_found": true,
+          "cites_gold": true
+        },
+        {
+          "question": "What happens when a container goes over its memory cap, compared with its CPU cap?",
+          "answerable": true,
+          "abstained": false,
+          "answer": "When a container uses more than its `memory` limit, the kernel may terminate it. [1] A container may use more memory than its `memory` limit, but if it does, it may get killed. [1] If a container exceeds its memory request and the node that it runs on becomes short of memory overall, it is likely that the Pod the container belongs to will be evicted. [2]",
+          "cited_docs": [
+            "configuration/manage-resources-containers.md",
+            "configuration/manage-resources-containers.md"
+          ],
+          "confidence": {
+            "rerank_score": 4.044,
+            "term_coverage": 0.432
+          },
+          "latency_ms": 3916.72,
+          "gold": [
+            "configuration/manage-resources-containers.md"
+          ],
+          "fact_found": false,
+          "cites_gold": true
+        },
+        {
+          "question": "Which pod security level is the most locked down?",
+          "answerable": true,
+          "abstained": false,
+          "answer": "Pod security restrictions are applied at the namespace level when pods are created. [1] Pod Security admission `restricted` policy, the most restrictive policy of the Pod Security Standards set, can operate in several modes, `warn`, `audit` or `enforce` to gradually apply the most appropriate security context according to security best practices. [2] The Kubernetes Pod Security Standards define different isolation levels for Pods. [1]",
+          "cited_docs": [
+            "security/pod-security-admission.md",
+            "security/security-checklist.md"
+          ],
+          "confidence": {
+            "rerank_score": 0.557,
+            "term_coverage": 0.482
+          },
+          "latency_ms": 7573.11,
+          "gold": [
+            "security/pod-security-standards.md"
+          ],
+          "fact_found": true,
+          "cites_gold": false
+        },
+        {
+          "question": "What modes can namespace pod security checks run in, such as blocking or just warning?",
+          "answerable": true,
+          "abstained": false,
+          "answer": "Pod Security admission `restricted` policy, the most restrictive policy of the Pod Security Standards set, can operate in several modes, `warn`, `audit` or `enforce` to gradually apply the most appropriate security context according to security best practices. [1] Once the feature is enabled or the webhook is installed, you can configure namespaces to define the admission control mode you want to use for pod security in each namespace. [2] These standards can be enforced at the namespace level with the new Pod Security admission, enabled by default, or by third-party admission webhook. [1]",
+          "cited_docs": [
+            "security/security-checklist.md",
+            "security/pod-security-admission.md"
+          ],
+          "confidence": {
+            "rerank_score": 4.159,
+            "term_coverage": 0.649
+          },
+          "latency_ms": 4595.07,
+          "gold": [
+            "security/pod-security-admission.md"
+          ],
+          "fact_found": true,
+          "cites_gold": true
+        },
+        {
+          "question": "What is the general principle to follow when giving out cluster permissions?",
+          "answerable": true,
+          "abstained": false,
+          "answer": "While each cluster will be different, some general rules that can be applied are : - Assign permissions at the namespace level where possible. [1] It is important to ensure that, when designing permissions for cluster users, the cluster administrator understands the areas where privilege escalation could occur, to reduce the risk of excessive access leading to security incidents. [2] Use RoleBindings as opposed to ClusterRoleBindings to give users rights only within a specific namespace. - Avoid providing wildcard permissions when possible, especially to all resources. [1]",
+          "cited_docs": [
+            "security/rbac-good-practices.md",
+            "security/rbac-good-practices.md"
+          ],
+          "confidence": {
+            "rerank_score": 2.013,
+            "term_coverage": 0.636
+          },
+          "latency_ms": 3066.63,
+          "gold": [
+            "security/rbac-good-practices.md"
+          ],
+          "fact_found": false,
+          "cites_gold": true
+        },
+        {
+          "question": "How do I cap the total CPU and memory one team's namespace can use?",
+          "answerable": true,
+          "abstained": false,
+          "answer": "Examples of policies that could be created using namespaces and quotas are: - In a cluster with a capacity of 32 GiB RAM, and 16 cores, let team A use 20 GiB and 10 cores, let B use 10GiB and 4 cores, and hold 2GiB and 2 cores in reserve for future allocation. - Limit the \"testing\" namespace to using 1 core and 1GiB RAM. [1] Examples of policies that could be created using LimitRange are: - In a 2 node cluster with a capacity of 8 GiB RAM and 16 cores, constrain Pods in a namespace to request 100m of CPU with a max limit of 500m for CPU and request 200Mi for Memory with a max limit of 600Mi for Memory. - Define default CPU limit and request to 150m and memory default request to 300Mi for Containers started with no cpu and memory requests in their specs. [2] In the case where the total limits of the namespace is less than the sum of the limits of the Pods/Containers, there may be contention for resources. [2]",
+          "cited_docs": [
+            "policy/resource-quotas.md",
+            "policy/limit-range.md"
+          ],
+          "confidence": {
+            "rerank_score": 0.385,
+            "term_coverage": 0.681
+          },
+          "latency_ms": 4724.75,
+          "gold": [
+            "policy/resource-quotas.md"
+          ],
+          "fact_found": false,
+          "cites_gold": true
+        },
+        {
+          "question": "How do I give containers default CPU and memory requests when they don't set any?",
+          "answerable": true,
+          "abstained": false,
+          "answer": "For example, if you set a `memory` request of 256 MiB for a container, and that container is in a Pod scheduled to a Node with 8GiB of memory and no other Pods, then the container can try to use more RAM. [1] Containers may not use more CPU than is specified in their `cpu` limit. [2] When a container approaches its `cpu` limit, the kernel will restrict access to the CPU corresponding to the container's limit. [1]",
+          "cited_docs": [
+            "configuration/manage-resources-containers.md",
+            "configuration/manage-resources-containers.md"
+          ],
+          "confidence": {
+            "rerank_score": 4.369,
+            "term_coverage": 0.798
+          },
+          "latency_ms": 4275.6,
+          "gold": [
+            "policy/limit-range.md"
+          ],
+          "fact_found": false,
+          "cites_gold": false
+        },
+        {
+          "question": "How do I keep ordinary workloads off machines reserved for GPU jobs?",
+          "answerable": true,
+          "abstained": false,
+          "answer": "The controller still creates a `Workload` and `PodGroup` for every eligible Job (including `Basic` ones), so the observable objects are consistent regardless of the policy. [1] When the `WorkloadWithJob` feature gate is enabled, the Job controller compiles a Job's `.spec.scheduling` configuration into Workload and PodGroup objects (`scheduling.k8s.io/v1beta1`) before it creates any Pods. [1] You can run DaemonSets (and their pods) across every node in your cluster, or across just a subset (for example, only install the GPU accelerator driver on nodes that have a GPU installed). [2]",
+          "cited_docs": [
+            "workloads/controllers/job.md",
+            "workloads/controllers/_index.md"
+          ],
+          "confidence": {
+            "rerank_score": -2.094,
+            "term_coverage": 0.754
+          },
+          "latency_ms": 4305.23,
+          "gold": [
+            "scheduling-eviction/taint-and-toleration.md"
+          ],
+          "fact_found": false,
+          "cites_gold": false
+        },
+        {
+          "question": "Which setting removes already-running pods from a machine that gets marked as off limits?",
+          "answerable": true,
+          "abstained": false,
+          "answer": "Once all pods are terminated, the entire Job is marked failed by the Job controller, by setting the Failed condition in the Job status. [1] Otherwise, the system may reject Pod creation. - LimitRange validations occur only at Pod admission stage, not on running Pods. [2] When the number of failed indexes exceeds the `maxFailedIndexes` field, the Job controller triggers termination of all remaining running Pods for that Job. [1]",
+          "cited_docs": [
+            "workloads/controllers/job.md",
+            "policy/limit-range.md"
+          ],
+          "confidence": {
+            "rerank_score": 3.958,
+            "term_coverage": 0.746
+          },
+          "latency_ms": 3449.77,
+          "gold": [
+            "scheduling-eviction/taint-and-toleration.md"
+          ],
+          "fact_found": false,
+          "cites_gold": false
+        },
+        {
+          "question": "How do I distribute replicas evenly across zones?",
+          "answerable": true,
+          "abstained": false,
+          "answer": "The nodes have enough capacity to run that many replicas; however, the clients that interact with this workload are split across three different datacenters (or infrastructure zones). [1] If the `distribute-cpus-across-numa`policy option is specified, the static policy will evenly distribute CPUs across NUMA nodes in cases where more than one NUMA node is required to satisfy the allocation. [2] By distributing CPUs evenly across NUMA nodes, application developers can more easily ensure that no single worker suffers from NUMA effects more than any other, improving the overall performance of these types of applications. [2]",
+          "cited_docs": [
+            "scheduling-eviction/topology-spread-constraints.md",
+            "resource-management/resource-managers.md"
+          ],
+          "confidence": {
+            "rerank_score": 0.612,
+            "term_coverage": 1.0
+          },
+          "latency_ms": 6193.2,
+          "gold": [
+            "scheduling-eviction/topology-spread-constraints.md"
+          ],
+          "fact_found": false,
+          "cites_gold": true
+        },
+        {
+          "question": "How do I make a pod run only on machines with SSDs?",
+          "answerable": true,
+          "abstained": false,
+          "answer": "However, there are some circumstances where you may want to control which node the Pod deploys to, for example, to ensure that a Pod ends up on a node with an SSD attached to it, or to co-locate Pods from two different services that communicate a lot into the same availability zone. [1] It is possible to create Pods directly which specify a particular node to run on. [2] You can constrain a Pod so that it is _restricted_ to run on particular node(s), or to _prefer_ to run on particular nodes. [1]",
+          "cited_docs": [
+            "scheduling-eviction/assign-pod-node.md",
+            "workloads/controllers/daemonset.md"
+          ],
+          "confidence": {
+            "rerank_score": 3.361,
+            "term_coverage": 0.857
+          },
+          "latency_ms": 4158.86,
+          "gold": [
+            "scheduling-eviction/assign-pod-node.md"
+          ],
+          "fact_found": false,
+          "cites_gold": true
+        },
+        {
+          "question": "Can an important workload push out less important ones when the cluster is full?",
+          "answerable": true,
+          "abstained": false,
+          "answer": "Victim importance hierarchy: The scheduler decides which preemption units (individual pods or PodGroups) are more critical and should be spared from preemption using a strict hierarchy: * Priority: Higher priority units are always more important. * Workload type: PodGroups are considered more important than individual Pods of the same priority. * Group size (PodGroups): If both units are PodGroups, the one with more members (larger size) is considered more important. * Start time: Units that started earlier are more important. [1] In addition to this basic usage, there are some advanced usage examples that enable your workloads to benefit on high availability and cluster utilization. [2] Imagine that you have a cluster of up to twenty nodes, and you want to run a workload that automatically scales how many replicas it uses. [2]",
+          "cited_docs": [
+            "scheduling-eviction/workload-aware-preemption.md",
+            "scheduling-eviction/topology-spread-constraints.md"
+          ],
+          "confidence": {
+            "rerank_score": -2.216,
+            "term_coverage": 0.586
+          },
+          "latency_ms": 4381.63,
+          "gold": [
+            "scheduling-eviction/pod-priority-preemption.md"
+          ],
+          "fact_found": true,
+          "cites_gold": false
+        },
+        {
+          "question": "What signal triggers pod removal when a machine is running out of RAM?",
+          "answerable": true,
+          "abstained": false,
+          "answer": "The kubelet triggers forcible removal of the Pod object from the API server, by setting grace period to 0 (immediate deletion). [1] Once the grace period has expired, the KILL signal is sent to any remaining processes, and the Pod is then deleted from the API Server. [2] When the grace period expires, if there is still any container running in the Pod, the kubelet triggers forcible shutdown. [1]",
+          "cited_docs": [
+            "workloads/pods/pod-lifecycle.md",
+            "workloads/pods/pod-lifecycle.md"
+          ],
+          "confidence": {
+            "rerank_score": 1.986,
+            "term_coverage": 0.588
+          },
+          "latency_ms": 5306.59,
+          "gold": [
+            "scheduling-eviction/node-pressure-eviction.md"
+          ],
+          "fact_found": false,
+          "cites_gold": false
+        },
+        {
+          "question": "How does the kubelet decide which containers can use swap?",
+          "answerable": true,
+          "abstained": false,
+          "answer": "The kubelet uses the container runtime API, and directs the container runtime to apply specific configuration (for example, in the cgroup v2 case, `memory.swap.max`) in a manner that will enable the desired swap configuration for a container. [1] When kubelet starts on a node in which swap is provisioned and available (with the `failSwapOn: false` configuration), kubelet will: - Be able to start on this swap-enabled node. - Direct the Container Runtime Interface (CRI) implementation, often referred to as the container runtime, to allocate zero swap memory to Kubernetes workloads by default. [2] However, processes outside of Kubernetes-managed containers, such as systemd services (and even the kubelet itself!) **can** utilize swap. [3]",
+          "cited_docs": [
+            "cluster-administration/swap-memory-management.md",
+            "cluster-administration/swap-memory-management.md",
+            "cluster-administration/swap-memory-management.md"
+          ],
+          "confidence": {
+            "rerank_score": 6.914,
+            "term_coverage": 0.626
+          },
+          "latency_ms": 5182.78,
+          "gold": [
+            "cluster-administration/swap-memory-management.md"
+          ],
+          "fact_found": false,
+          "cites_gold": true
+        },
+        {
+          "question": "What is our company's parental leave policy?",
+          "answerable": false,
+          "abstained": true,
+          "answer": "I couldn't find this in the knowledge base.",
+          "cited_docs": [],
+          "confidence": {
+            "rerank_score": -10.488,
+            "term_coverage": 0.367
+          },
+          "latency_ms": 3593.53
+        },
+        {
+          "question": "How much would a three-node EKS cluster cost per month?",
+          "answerable": false,
+          "abstained": true,
+          "answer": "I couldn't find this in the knowledge base.",
+          "cited_docs": [],
+          "confidence": {
+            "rerank_score": -7.048,
+            "term_coverage": 0.555
+          },
+          "latency_ms": 2371.72
+        },
+        {
+          "question": "What was our revenue last quarter?",
+          "answerable": false,
+          "abstained": true,
+          "answer": "I couldn't find this in the knowledge base.",
+          "cited_docs": [],
+          "confidence": {
+            "rerank_score": -11.278,
+            "term_coverage": 0.216
+          },
+          "latency_ms": 5992.58
+        },
+        {
+          "question": "Who is the on-call engineer this week?",
+          "answerable": false,
+          "abstained": true,
+          "answer": "I couldn't find this in the knowledge base.",
+          "cited_docs": [],
+          "confidence": {
+            "rerank_score": -11.227,
+            "term_coverage": 0.589
+          },
+          "latency_ms": 4003.59
+        },
+        {
+          "question": "How do I configure Terraform remote state in S3?",
+          "answerable": false,
+          "abstained": true,
+          "answer": "I couldn't find this in the knowledge base.",
+          "cited_docs": [],
+          "confidence": {
+            "rerank_score": -6.646,
+            "term_coverage": 0.207
+          },
+          "latency_ms": 4846.15
+        },
+        {
+          "question": "What is the best autovacuum setting for a 2 TB Postgres table?",
+          "answerable": false,
+          "abstained": true,
+          "answer": "I couldn't find this in the knowledge base.",
+          "cited_docs": [],
+          "confidence": {
+            "rerank_score": -10.966,
+            "term_coverage": 0.374
+          },
+          "latency_ms": 5976.48
+        },
+        {
+          "question": "What is the syntax for a Python list comprehension?",
+          "answerable": false,
+          "abstained": true,
+          "answer": "I couldn't find this in the knowledge base.",
+          "cited_docs": [],
+          "confidence": {
+            "rerank_score": -6.896,
+            "term_coverage": 0.341
+          },
+          "latency_ms": 5476.2
+        },
+        {
+          "question": "How do I reset my VPN password?",
+          "answerable": false,
+          "abstained": true,
+          "answer": "I couldn't find this in the knowledge base.",
+          "cited_docs": [],
+          "confidence": {
+            "rerank_score": -5.592,
+            "term_coverage": 0.69
+          },
+          "latency_ms": 4443.02
+        },
+        {
+          "question": "Which Helm chart version does the payments team deploy?",
+          "answerable": false,
+          "abstained": false,
+          "answer": "These packages are known as _Helm charts_. [1] Helm is a tool for managing packages of pre-configured Kubernetes resources. [1] Consider a slightly more complicated application: a web application (WordPress) using a database (MySQL), installed using Helm. [2]",
+          "cited_docs": [
+            "workloads/management.md",
+            "overview/working-with-objects/common-labels.md"
+          ],
+          "confidence": {
+            "rerank_score": -0.842,
+            "term_coverage": 0.756
+          },
+          "latency_ms": 6029.73
+        },
+        {
+          "question": "What eviction policy does our Redis cache use?",
+          "answerable": false,
+          "abstained": true,
+          "answer": "I couldn't find this in the knowledge base.",
+          "cited_docs": [],
+          "confidence": {
+            "rerank_score": -3.538,
+            "term_coverage": 1.0
+          },
+          "latency_ms": 6122.72
+        },
+        {
+          "question": "How do I submit an expense report?",
+          "answerable": false,
+          "abstained": true,
+          "answer": "I couldn't find this in the knowledge base.",
+          "cited_docs": [],
+          "confidence": {
+            "rerank_score": -9.649,
+            "term_coverage": 1.0
+          },
+          "latency_ms": 2873.67
+        },
+        {
+          "question": "What is the maximum timeout for an AWS Lambda function?",
+          "answerable": false,
+          "abstained": true,
+          "answer": "I couldn't find this in the knowledge base.",
+          "cited_docs": [],
+          "confidence": {
+            "rerank_score": -4.068,
+            "term_coverage": 0.331
+          },
+          "latency_ms": 4769.32
+        }
+      ]
+    },
+    "retrieval": {
+      "bm25": {
+        "hit1": 0.3636,
+        "hit3": 0.5455,
+        "hit5": 0.6545,
+        "mrr10": 0.4992,
+        "ndcg10": 0.5649,
+        "fact_in_top5": 0.6909,
+        "mrr10_ci95": [
+          0.394,
+          0.609
+        ]
+      },
+      "dense": {
+        "hit1": 0.4909,
+        "hit3": 0.7091,
+        "hit5": 0.7455,
+        "mrr10": 0.6041,
+        "ndcg10": 0.6403,
+        "fact_in_top5": 0.7455,
+        "mrr10_ci95": [
+          0.5,
+          0.71
+        ]
+      },
+      "hybrid": {
+        "hit1": 0.5455,
+        "hit3": 0.7091,
+        "hit5": 0.7818,
+        "mrr10": 0.6382,
+        "ndcg10": 0.6804,
+        "fact_in_top5": 0.8182,
+        "mrr10_ci95": [
+          0.526,
+          0.744
+        ]
+      },
+      "rerank": {
+        "hit1": 0.5636,
+        "hit3": 0.7818,
+        "hit5": 0.8364,
+        "mrr10": 0.6945,
+        "ndcg10": 0.7295,
+        "fact_in_top5": 0.8364,
+        "mrr10_ci95": [
+          0.594,
+          0.792
+        ]
+      }
+    }
+  }
+}
