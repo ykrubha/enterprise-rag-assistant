@@ -1,8 +1,14 @@
 # Enterprise AI Knowledge Assistant
 
+[![tests](https://github.com/ykrubha/enterprise-rag-assistant/actions/workflows/tests.yml/badge.svg)](https://github.com/ykrubha/enterprise-rag-assistant/actions/workflows/tests.yml)
+
 A retrieval-augmented generation (RAG) service that answers questions from a document collection, cites its sources, and declines when the documents don't support an answer. It has a FastAPI backend, hybrid search with reranking, and an evaluation pipeline with a held-out test set.
 
 The knowledge base here is the Kubernetes concept documentation (186 documents, 2,902 chunks), standing in for an internal engineering wiki.
+
+![The API answering with a citation, then declining an unsupported question](assets/rag_api_demo.png)
+
+*Two responses recorded in the held-out evaluation with `gemini-3.5-flash-lite`: one answered with a citation, one declined because the documents don't cover it.*
 
 ## How it works
 
